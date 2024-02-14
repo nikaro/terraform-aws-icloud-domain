@@ -1,3 +1,9 @@
+## 1.0.0 (2024-02-14)
+
+### Feat
+
+- remove conditional records flags
+
 ## 0.2.0 (2024-02-14)
 
 ### Feat
