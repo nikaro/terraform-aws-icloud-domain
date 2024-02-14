@@ -9,7 +9,6 @@ terraform {
 }
 
 resource "aws_route53_record" "mx" {
-  count   = var.mx_enabled ? 1 : 0
   zone_id = var.zone.id
   name    = var.zone.name
   type    = "MX"
@@ -20,19 +19,18 @@ resource "aws_route53_record" "mx" {
   ]
 }
 
-resource "aws_route53_record" "spf" {
-  count   = var.spf_enabled ? 1 : 0
+resource "aws_route53_record" "txt_apex" {
   zone_id = var.zone.id
   name    = var.zone.name
   type    = "TXT"
   ttl     = var.ttl
   records = [
     "v=spf1 ${join(" ", [for i in var.spf_includes : "include:${i}"])} ${var.spf_policy}",
+    "apple-domain=${var.domain_verif_data}",
   ]
 }
 
 resource "aws_route53_record" "dkim" {
-  count   = var.dkim_enabled ? 1 : 0
   zone_id = var.zone.id
   name    = "sig1._domainkey.${var.zone.name}"
   type    = "CNAME"
@@ -43,7 +41,6 @@ resource "aws_route53_record" "dkim" {
 }
 
 resource "aws_route53_record" "dmarc" {
-  count   = var.dmarc_enabled ? 1 : 0
   zone_id = var.zone.id
   name    = "_dmarc.${var.zone.name}"
   type    = "TXT"
@@ -54,7 +51,6 @@ resource "aws_route53_record" "dmarc" {
 }
 
 resource "aws_route53_record" "srv_submission" {
-  count   = var.autodiscover_enabled ? 1 : 0
   zone_id = var.zone.id
   name    = "_submission._tcp.${var.zone.name}"
   type    = "SRV"
@@ -65,22 +61,11 @@ resource "aws_route53_record" "srv_submission" {
 }
 
 resource "aws_route53_record" "srv_imaps" {
-  count   = var.autodiscover_enabled ? 1 : 0
   zone_id = var.zone.id
   name    = "_imaps._tcp.${var.zone.name}"
   type    = "SRV"
   ttl     = var.ttl
   records = [
     "0 1 993 imap.mail.me.com.",
-  ]
-}
-
-resource "aws_route53_record" "domain_verif_data" {
-  zone_id = var.zone.id
-  name    = var.zone.name
-  type    = "TXT"
-  ttl     = var.ttl
-  records = [
-    "apple-domain=${var.domain_verif_data}",
   ]
 }

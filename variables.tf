@@ -6,22 +6,10 @@ variable "zone" {
   })
 }
 
-variable "mx_enabled" {
-  description = "Enable MX records."
-  type        = bool
-  default     = true
-}
-
 variable "mx_priority" {
   description = "MX records priority."
   type        = number
   default     = 10
-}
-
-variable "spf_enabled" {
-  description = "Enable SPF records."
-  type        = bool
-  default     = true
 }
 
 variable "spf_includes" {
@@ -40,18 +28,6 @@ variable "spf_policy" {
   }
 }
 
-variable "dkim_enabled" {
-  description = "Enable DKIM records."
-  type        = bool
-  default     = true
-}
-
-variable "dmarc_enabled" {
-  description = "Enable DMARC records."
-  type        = bool
-  default     = true
-}
-
 variable "dmarc_policy" {
   description = "DMARC policy."
   type        = string
@@ -60,12 +36,6 @@ variable "dmarc_policy" {
     condition     = contains(["none", "quarantine", "reject"], var.dmarc_policy)
     error_message = "value must be one of: none, quarantine, reject"
   }
-}
-
-variable "autodiscover_enabled" {
-  description = "Enable autodiscover records."
-  type        = bool
-  default     = true
 }
 
 variable "domain_verif_data" {
