@@ -1,11 +1,9 @@
-variable "zone_name" {
-  description = "Zone name where to publish records."
-  type        = string
-}
-
-variable "zone_id" {
-  description = "Zone ID where to publish records."
-  type        = string
+variable "zone" {
+  description = "Zone where to publish records."
+  type = object({
+    id   = string
+    name = string
+  })
 }
 
 variable "mx_enabled" {

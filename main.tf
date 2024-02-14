@@ -10,8 +10,8 @@ terraform {
 
 resource "aws_route53_record" "mx" {
   count   = var.mx_enabled ? 1 : 0
-  zone_id = var.zone_id
-  name    = var.zone_name
+  zone_id = var.zone.id
+  name    = var.zone.name
   type    = "MX"
   ttl     = var.ttl
   records = [
@@ -22,8 +22,8 @@ resource "aws_route53_record" "mx" {
 
 resource "aws_route53_record" "spf" {
   count   = var.spf_enabled ? 1 : 0
-  zone_id = var.zone_id
-  name    = var.zone_name
+  zone_id = var.zone.id
+  name    = var.zone.name
   type    = "TXT"
   ttl     = var.ttl
   records = [
@@ -33,19 +33,19 @@ resource "aws_route53_record" "spf" {
 
 resource "aws_route53_record" "dkim" {
   count   = var.dkim_enabled ? 1 : 0
-  zone_id = var.zone_id
-  name    = "sig1._domainkey.${var.zone_name}"
+  zone_id = var.zone.id
+  name    = "sig1._domainkey.${var.zone.name}"
   type    = "CNAME"
   ttl     = var.ttl
   records = [
-    "sig1.dkim.${var.zone_name}.at.icloudmailadmin.com.",
+    "sig1.dkim.${var.zone.name}.at.icloudmailadmin.com.",
   ]
 }
 
 resource "aws_route53_record" "dmarc" {
   count   = var.dmarc_enabled ? 1 : 0
-  zone_id = var.zone_id
-  name    = "_dmarc.${var.zone_name}"
+  zone_id = var.zone.id
+  name    = "_dmarc.${var.zone.name}"
   type    = "TXT"
   ttl     = var.ttl
   records = [
@@ -55,8 +55,8 @@ resource "aws_route53_record" "dmarc" {
 
 resource "aws_route53_record" "srv_submission" {
   count   = var.autodiscover_enabled ? 1 : 0
-  zone_id = var.zone_id
-  name    = "_submission._tcp.${var.zone_name}"
+  zone_id = var.zone.id
+  name    = "_submission._tcp.${var.zone.name}"
   type    = "SRV"
   ttl     = var.ttl
   records = [
@@ -66,8 +66,8 @@ resource "aws_route53_record" "srv_submission" {
 
 resource "aws_route53_record" "srv_imaps" {
   count   = var.autodiscover_enabled ? 1 : 0
-  zone_id = var.zone_id
-  name    = "_imaps._tcp.${var.zone_name}"
+  zone_id = var.zone.id
+  name    = "_imaps._tcp.${var.zone.name}"
   type    = "SRV"
   ttl     = var.ttl
   records = [
@@ -76,8 +76,8 @@ resource "aws_route53_record" "srv_imaps" {
 }
 
 resource "aws_route53_record" "domain_verif_data" {
-  zone_id = var.zone_id
-  name    = var.zone_name
+  zone_id = var.zone.id
+  name    = var.zone.name
   type    = "TXT"
   ttl     = var.ttl
   records = [
