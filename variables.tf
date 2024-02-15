@@ -48,3 +48,15 @@ variable "ttl" {
   type        = number
   default     = 3600
 }
+
+variable "manage_txt_apex_records" {
+  description = "Whether to manage TXT records at the apex."
+  type        = bool
+  default     = true
+}
+
+variable "additional_txt_apex_records" {
+  description = "TXT records to create inside of the module."
+  type        = list(string)
+  default     = []
+}

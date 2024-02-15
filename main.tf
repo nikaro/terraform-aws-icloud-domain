@@ -19,15 +19,20 @@ resource "aws_route53_record" "mx" {
   ]
 }
 
+locals {
+  txt_apex_records = [
+    "v=spf1 ${join(" ", [for i in var.spf_includes : "include:${i}"])} ${var.spf_policy}",
+    "apple-domain=${var.domain_verif_data}",
+  ]
+}
+
 resource "aws_route53_record" "txt_apex" {
+  count   = var.manage_txt_apex_records ? 1 : 0
   zone_id = var.zone.id
   name    = var.zone.name
   type    = "TXT"
   ttl     = var.ttl
-  records = [
-    "v=spf1 ${join(" ", [for i in var.spf_includes : "include:${i}"])} ${var.spf_policy}",
-    "apple-domain=${var.domain_verif_data}",
-  ]
+  records = concat(local.txt_apex_records, var.additional_txt_apex_records)
 }
 
 resource "aws_route53_record" "dkim" {
